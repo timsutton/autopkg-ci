@@ -20,7 +20,9 @@ else:
 checkout_dir = 'autopkg-recipes'
 
 # the Jenkins job will have already written out this job's recipe to this file
-recipe_list_file = 'recipe.txt'
+recipe_list_file = os.path.join(os.environ['WORKSPACE'], 'recipe.txt')
+if not os.path.exists(recipe_list_file):
+    sys.exit("Missing expected recipe list file at %s" % recipe_list_file)
 
 # this string is used by the Description Setter plugin to set a description of
 # the build which we're repurposing to contain the version number
