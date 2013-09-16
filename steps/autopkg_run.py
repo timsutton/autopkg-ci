@@ -11,16 +11,17 @@ from tempfile import mkdtemp
 # temp dirs
 tmp_cache, tmp_munki_repo = mkdtemp(), mkdtemp()
 
+workspace = os.environ['WORKSPACE']
 # Git
 if 'GIT' in os.environ.keys():
     git_path = os.environ['GIT']
 else:
     git_path = '/usr/bin/git'
 
-checkout_dir = 'autopkg-recipes'
+checkout_dir = os.path.join(workspace, 'autopkg-recipes')
 
 # the Jenkins job will have already written out this job's recipe to this file
-recipe_list_file = os.path.join(os.environ['WORKSPACE'], 'recipe.txt')
+recipe_list_file = os.path.join(workspace, 'recipe.txt')
 if not os.path.exists(recipe_list_file):
     sys.exit("Missing expected recipe list file at %s" % recipe_list_file)
 
@@ -45,7 +46,7 @@ def main():
 
     # run autopkg
     autopkg_cmd = [
-    'Code/autopkg',
+    os.path.join(workspace, 'Code/autopkg'),
     'run',
     '--report-plist',
     '--search-dir', checkout_dir,
