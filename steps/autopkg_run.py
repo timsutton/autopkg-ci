@@ -74,9 +74,9 @@ def main():
             print >> sys.stderr, "Failure for recipe %s:" % fail['recipe']
             print >> sys.stderr, fail['message']
 
-    pprint report_plist['new_downloads']
-    pprint report_plist['new_imports']
-    pprint report_plist['new_packages']
+    pprint(report_plist['new_downloads'])
+    pprint(report_plist['new_imports'])
+    pprint(report_plist['new_packages'])
 
     # print out our version info for the Build Description Setter
     version = get_version(report_plist)
