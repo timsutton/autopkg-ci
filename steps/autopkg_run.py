@@ -6,28 +6,9 @@ import shutil
 import subprocess
 import sys
 
+from pprint import pprint
 from tempfile import mkdtemp
 
-# temp dirs
-tmp_cache, tmp_munki_repo = mkdtemp(), mkdtemp()
-
-workspace = os.environ['WORKSPACE']
-# Git
-if 'GIT' in os.environ.keys():
-    git_path = os.environ['GIT']
-else:
-    git_path = '/usr/bin/git'
-
-checkout_dir = os.path.join(workspace, 'autopkg-recipes')
-
-# the Jenkins job will have already written out this job's recipe to this file
-recipe_list_file = os.path.join(workspace, 'recipe.txt')
-if not os.path.exists(recipe_list_file):
-    sys.exit("Missing expected recipe list file at %s" % recipe_list_file)
-
-# this string is used by the Description Setter plugin to set a description of
-# the build which we're repurposing to contain the version number
-version_out_string = "PARSED_VERSION"
 
 def get_version(report_plist):
     for new_list in ['new_imports', 'new_packages']:
@@ -37,7 +18,28 @@ def get_version(report_plist):
                     return item['version']
     return None
 
+
 def main():
+    # temp dirs
+    tmp_cache, tmp_munki_repo = mkdtemp(), mkdtemp()
+
+    workspace = os.environ['WORKSPACE']
+    # Git
+    if 'GIT' in os.environ.keys():
+        git_path = os.environ['GIT']
+    else:
+        git_path = '/usr/bin/git'
+
+    checkout_dir = os.path.join(workspace, 'autopkg-recipes')
+
+    # the Jenkins job will have already written out this job's recipe to this file
+    recipe_list_file = os.path.join(workspace, 'recipe.txt')
+    if not os.path.exists(recipe_list_file):
+        sys.exit("Missing expected recipe list file at %s" % recipe_list_file)
+
+    # this string is used by the Description Setter plugin to set a description of
+    # the build which we're repurposing to contain the version number
+    version_out_string = "PARSED_VERSION"
 
     # check out recipes
     if os.path.exists(checkout_dir):
@@ -66,7 +68,17 @@ def main():
         print >> sys.stderr, out
         sys.exit("Couldn't parse a valid report plist!")
 
-    # print out our version info
+    # output our report data
+    if report_plist['failures']:
+        for fail in report_plist['failures']:
+            print >> sys.stderr, "Failure for recipe %s:" % fail['recipe']
+            print >> sys.stderr, fail['message']
+
+    pprint report_plist['new_downloads']
+    pprint report_plist['new_imports']
+    pprint report_plist['new_packages']
+
+    # print out our version info for the Build Description Setter
     version = get_version(report_plist)
     if not version:
         version = 'N/A'
@@ -78,4 +90,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
