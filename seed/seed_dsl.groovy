@@ -13,12 +13,12 @@ streamFileFromWorkspace("${RECIPE_LIST_FILE}").eachLine {
     }
 
     triggers {
-        cron('H H(0-3),H(4-7),H(8-11),H(12-15),H(16-19),H(20-23) * * *')
+      cron('H H(0-3),H(4-7),H(8-11),H(12-15),H(16-19),H(20-23) * * *')
     }
 
     steps {
-        shell("echo ${recipeName} > recipe.txt")
-        shell(readFileFromWorkspace('autopkg-ci/steps/autopkg_run.py'))
+      shell("echo ${recipeName} > recipe.txt")
+      shell(readFileFromWorkspace('autopkg-ci/steps/autopkg_run.py'))
     }
 
     publishers {
