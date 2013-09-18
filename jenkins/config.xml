@@ -131,45 +131,8 @@
       <command>Code/autopkg list-recipes -d autopkg-recipes &gt; &quot;$RECIPE_LIST_FILE&quot;</command>
     </hudson.tasks.Shell>
     <javaposse.jobdsl.plugin.ExecuteDslScripts plugin="job-dsl@1.16">
-      <scriptText>streamFileFromWorkspace(&quot;${RECIPE_LIST_FILE}&quot;).eachLine {
-
-  def recipeName = it
-  def emailRecipients = &quot;\${DEFAULT_RECIPIENTS}&quot;
-  def emailSubject = &quot;\${PROJECT_NAME} - \${BUILD_STATUS}&quot;
-  def emailBody = &quot;\${BUILD_LOG}&quot;
-
-  job {
-      name &quot;autopkg-${recipeName}&quot;
-
-      scm {
-          git(&apos;git://github.com/autopkg/autopkg.git&apos;, &apos;master&apos;)
-      }
-
-      triggers {
-          cron(&apos;H H(0-3),H(4-7),H(8-11),H(12-15),H(16-19),H(20-23) * * *&apos;)
-      }
-
-      steps {
-          shell(&quot;echo ${recipeName} &gt; recipe.txt&quot;)
-          shell(readFileFromWorkspace(&quot;autopkg-ci/steps/autopkg_run.py&quot;))
-      }
-
-      publishers {
-          extendedEmail(emailRecipients, emailSubject, emailBody) {
-            trigger(&apos;Failure&apos;)
-            trigger(&apos;Fixed&apos;)
-        }
-      }
-
-      configure { project -&gt;
-          def setter = project / publishers / &apos;hudson.plugins.descriptionsetter.DescriptionSetterPublisher&apos;
-          setter / regexp &lt;&lt; &apos;^PARSED_VERSION (.*)&apos;
-          setter / regexpForFailed &lt;&lt; &apos;&apos;
-          setter / setForMatrix &lt;&lt; &apos;false&apos;
-      }
-  }
-}</scriptText>
-      <usingScriptText>true</usingScriptText>
+      <targets>autopkg-ci/seed/seed_dsl.groovy</targets>
+      <usingScriptText>false</usingScriptText>
       <ignoreExisting>false</ignoreExisting>
       <removedJobAction>DELETE</removedJobAction>
     </javaposse.jobdsl.plugin.ExecuteDslScripts>
