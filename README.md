@@ -4,7 +4,7 @@ This is a work-in-progress Jenkins setup for doing automated runs of [AutoPkg](h
 
 ## Job workflow
 
-There exists a job for every that exists in the main AutoPkg [recipes](https://github.com/autopkg/recipes) repo. These jobs are generated automatically via a "seed" job that leverages the Job DSL plugin. With a short script using this Job DSL, we can effectively template a job at a higher level than raw config XML and parameterize which actual recipe that will be run in addition to any other variables.
+There exists a job for every that exists in the main AutoPkg [recipes](https://github.com/autopkg/recipes) repo. These jobs are generated automatically via a "seed" job that leverages the [Job DSL plugin](https://wiki.jenkins-ci.org/display/JENKINS/Job+DSL+Plugin). With a short script using this DSL, we can effectively template a job at a higher level than raw config XML and parameterize which actual recipe that will be run in addition to any other variables.
 
 The jobs run on a randomized repeating 4-hour window, and essentially run one script, located in `steps/autopkg_run.py`, which does a run of a single recipe.
 
