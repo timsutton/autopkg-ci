@@ -68,12 +68,6 @@ def main():
         print >> sys.stderr, out
         sys.exit("Couldn't parse a valid report plist!")
 
-    # output our report data
-    if report_plist['failures']:
-        for fail in report_plist['failures']:
-            print >> sys.stderr, "Failure for recipe %s:" % fail['recipe']
-            print >> sys.stderr, fail['message']
-
     pprint(report_plist['new_downloads'])
     pprint(report_plist['new_imports'])
     pprint(report_plist['new_packages'])
@@ -87,6 +81,14 @@ def main():
     # clean up
     for stuff in [tmp_cache, tmp_munki_repo, checkout_dir]:
         shutil.rmtree(stuff)
+
+    # output our failure data
+    if report_plist['failures']:
+        for fail in report_plist['failures']:
+            print >> sys.stderr, "Failure for recipe %s:" % fail['recipe']
+            print >> sys.stderr, fail['message']
+        sys.exit(1)
+
 
 if __name__ == '__main__':
     main()
