@@ -6,7 +6,7 @@ streamFileFromWorkspace("${RECIPE_LIST_FILE}").eachLine {
   def emailBody = "\${BUILD_LOG}"
 
   job {
-    name "autopkg-${recipeName}"
+    name "${recipeName}"
 
     multiscm {
       git('git://github.com/autopkg/autopkg.git', 'master')
