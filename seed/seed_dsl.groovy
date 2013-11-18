@@ -25,6 +25,8 @@ streamFileFromWorkspace("${RECIPE_LIST_FILE}").eachLine {
       extendedEmail(emailRecipients, emailSubject, emailBody) {
         trigger('Failure')
         trigger('Fixed')
+        trigger(triggerName: 'StillFailing', subject: emailSubject, body:emailBody, recipientList:emailRecipients,
+            sendToDevelopers: false, sendToRequester: false, includeCulprits: false, sendToRecipientList: false)
       }
     }
 
