@@ -65,7 +65,7 @@ def main():
     try:
         report_plist = plistlib.readPlistFromString(out)
     except:
-        print >> sys.stderr, out
+        print >> sys.stderr, err
         sys.exit("Couldn't parse a valid report plist!")
 
     pprint(report_plist['new_downloads'])
