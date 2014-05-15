@@ -8,6 +8,8 @@ streamFileFromWorkspace("${RECIPE_LIST_FILE}").eachLine {
   job {
     name "${recipeName}"
 
+    label('mavericks')
+
     multiscm {
       git('git://github.com/autopkg/autopkg.git', 'master')
     }
