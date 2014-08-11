@@ -7,7 +7,7 @@ import subprocess
 import sys
 
 from pprint import pprint
-from tempfile import mkdtemp
+from tempfile import mkdtemp, mkstemp
 
 
 def get_version(report_plist):
@@ -46,11 +46,14 @@ def main():
         shutil.rmtree(checkout_dir)
     subprocess.call([git_path, 'clone', 'https://github.com/autopkg/recipes', checkout_dir])
 
+    # make temp report plist
+    report_file = mkstemp()[1]
+
     # run autopkg
     autopkg_cmd = [
     os.path.join(workspace, 'Code/autopkg'),
     'run',
-    '--report-plist',
+    '--report-plist', report_file,
     '--search-dir', checkout_dir,
     '-k', 'CACHE_DIR=%s' % tmp_cache,
     '-k', 'MUNKI_REPO=%s' % tmp_munki_repo,
@@ -62,10 +65,12 @@ def main():
                     stderr=subprocess.PIPE,
                     env={'LANG': 'en_US.UTF-8'})
     out, err = p.communicate()
-    try:
-        report_plist = plistlib.readPlistFromString(out)
-    except:
+    if err:
         print >> sys.stderr, err
+
+    try:
+        report_plist = plistlib.readPlist(report_file)
+    except:
         sys.exit("Couldn't parse a valid report plist!")
 
     pprint(report_plist['new_downloads'])
@@ -81,6 +86,7 @@ def main():
     # clean up
     for stuff in [tmp_cache, tmp_munki_repo, checkout_dir]:
         shutil.rmtree(stuff)
+    os.remove(report_file)
 
     # output our failure data
     if report_plist['failures']:
