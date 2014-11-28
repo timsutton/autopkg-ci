@@ -46,13 +46,18 @@ def main():
     # make temp report plist
     report_file = mkstemp()[1]
 
+    # make fake Munki repo
+    munki_repo_path = '/private/tmp/autopkg-ci-munki-repo'
+    if not os.path.isdir(munki_repo_path):
+        os.mkdir(munki_repo_path)
+
     # run autopkg
     autopkg_cmd = [
     os.path.join(workspace, 'Code/autopkg'),
     'run',
     '--report-plist', report_file,
     '--search-dir', checkout_dir,
-    '-k', 'MUNKI_REPO=%s' % '/private/tmp/autopkg-ci-munki-repo',
+    '-k', 'MUNKI_REPO=%s' % munki_repo_path,
     '--recipe-list', recipe_list_file
     ]
 
