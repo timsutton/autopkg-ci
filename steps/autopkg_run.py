@@ -20,9 +20,6 @@ def get_version(report_plist):
 
 
 def main():
-    # temp dirs
-    tmp_cache, tmp_munki_repo = mkdtemp(), mkdtemp()
-
     workspace = os.environ['WORKSPACE']
     # Git
     if 'GIT' in os.environ.keys():
@@ -55,8 +52,7 @@ def main():
     'run',
     '--report-plist', report_file,
     '--search-dir', checkout_dir,
-    '-k', 'CACHE_DIR=%s' % tmp_cache,
-    '-k', 'MUNKI_REPO=%s' % tmp_munki_repo,
+    '-k', 'MUNKI_REPO=%s' % "/private/tmp/autopkg-ci-munki-repo,
     '--recipe-list', recipe_list_file
     ]
 
@@ -84,7 +80,7 @@ def main():
     print "%s %s" % (version_out_string, version)
 
     # clean up
-    for stuff in [tmp_cache, tmp_munki_repo, checkout_dir]:
+    for stuff in [checkout_dir]:
         shutil.rmtree(stuff)
     os.remove(report_file)
 
