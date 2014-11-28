@@ -52,7 +52,7 @@ def main():
     'run',
     '--report-plist', report_file,
     '--search-dir', checkout_dir,
-    '-k', 'MUNKI_REPO=%s' % "/private/tmp/autopkg-ci-munki-repo,
+    '-k', 'MUNKI_REPO=%s' % '/private/tmp/autopkg-ci-munki-repo',
     '--recipe-list', recipe_list_file
     ]
 
