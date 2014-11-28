@@ -15,7 +15,7 @@ streamFileFromWorkspace("${RECIPE_LIST_FILE}").eachLine {
     }
 
     triggers {
-      cron('H H(0-3),H(4-7),H(8-11),H(12-15),H(16-19),H(20-23) * * *')
+      cron('H H(0-7),H(8-15),H(16-23) * * *')
     }
 
     steps {
