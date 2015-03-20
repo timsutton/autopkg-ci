@@ -11,9 +11,9 @@ from tempfile import mkdtemp, mkstemp
 
 
 def get_version(report_plist):
-    for new_list in ['new_imports', 'new_packages']:
-        if report_plist[new_list]:
-            for item in report_plist[new_list]:
+    for new_list in ['munki_importer_summary_result', 'pkg_creator_summary_result']:
+        if report_plist['summary_results'].get(new_list):
+            for item in report_plist['summary_results'][new_list]['data_rows']:
                 if 'version' in item.keys():
                     return item['version']
     return None
@@ -73,10 +73,7 @@ def main():
         report_plist = plistlib.readPlist(report_file)
     except:
         sys.exit("Couldn't parse a valid report plist!")
-
-    pprint(report_plist['new_downloads'])
-    pprint(report_plist['new_imports'])
-    pprint(report_plist['new_packages'])
+    pprint(report_plist['summary_results'])
 
     # print out our version info for the Build Description Setter
     version = get_version(report_plist)
