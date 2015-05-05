@@ -8,8 +8,8 @@ streamFileFromWorkspace("${RECIPE_LIST_FILE}").eachLine {
   job {
     name "${recipeName}"
 
-    logRotator(int daysToKeep = 30, int numToKeep = -1,
-               int artifactDaysToKeep = -1, int artifactNumToKeep = -1)
+    //logRotator(int daysToKeepInt, int numToKeepInt, int artifactDaysToKeepInt, int artifactNumToKeepInt)
+    logRotator(30, -1, -1, -1)
     label('mavericks')
 
     multiscm {
