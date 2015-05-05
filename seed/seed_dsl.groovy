@@ -33,6 +33,13 @@ streamFileFromWorkspace("${RECIPE_LIST_FILE}").eachLine {
     }
 
     configure { project ->
+      project << logRotator {
+          daysToKeep(60)
+          numToKeep(-1)
+          artifactDaysToKeep(-1)
+          artifactNumToKeep(-1)
+      }
+
       def setter = project / publishers / 'hudson.plugins.descriptionsetter.DescriptionSetterPublisher'
       setter / regexp << '^PARSED_VERSION (.*)'
       setter / regexpForFailed << ''
