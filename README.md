@@ -1,6 +1,8 @@
 ## autopkg-ci
 
-This is a work-in-progress Jenkins setup for doing automated runs of [AutoPkg](https://github.com/autopkg/autopkg) recipes. There are two main reasons a recipe could break, and we'd like to be able to catch these early: 1) a software vendor changes their metadata feed, website, or whatever a recipe depends on to extract versions, and 2) changes in the AutoPkg code itself. We can detect breakages from AutoPkg code changes because we run AutoPkg out of Git.
+This project contains the components of a Jenkins setup for doing automated runs of [AutoPkg](https://github.com/autopkg/autopkg) recipes. I've since stopped maintaining this project, mainly because users tended to report broken recipes before this system was able to catch them (given a run frequency of every 8 hours). It's here as a reference of how to dynamically generate Jenkins jobs as well as how to run AutoPkg recipes in the context of a CI system, so that recipe failures could be caught and users notified.
+
+There are two main reasons a recipe could break, and we'd like to be able to catch these early: 1) a software vendor changes their metadata feed, website, or whatever a recipe depends on to extract versions, and 2) changes in the AutoPkg code itself. We can detect breakages from AutoPkg code changes because we run AutoPkg out of Git.
 
 ## Job workflow
 
